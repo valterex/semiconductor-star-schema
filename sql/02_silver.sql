@@ -22,7 +22,7 @@ CREATE TABLE silver.chip_companies_financials (
     year SMALLINT,
     company_name VARCHAR(100),
     ticker VARCHAR(10),
-    country_iso3 CHAR(3),
+    country_iso3 VARCHAR(3),
     segment VARCHAR(50),
     revenue_usd_bn NUMERIC(10, 2),
     operating_margin_pct NUMERIC(5, 2),
@@ -35,7 +35,7 @@ CREATE TABLE silver.chip_prices (
     year_month DATE,
     year SMALLINT,
     product VARCHAR(50),
-    currency CHAR(3),
+    currency VARCHAR(3),
     unit VARCHAR(30),
     price NUMERIC(10, 2)
 );
@@ -43,7 +43,7 @@ CREATE TABLE silver.chip_prices (
 CREATE TABLE silver.fab_capacity (
     year SMALLINT,
     company VARCHAR(100),
-    country_iso3 CHAR(3),
+    country_iso3 VARCHAR(3),
     process_node_nm NUMERIC(5, 2),
     fab_type VARCHAR(30),
     monthly_wafer_capacity NUMERIC(12, 2),
@@ -53,7 +53,7 @@ CREATE TABLE silver.fab_capacity (
 CREATE TABLE silver.export_controls (
     control_id VARCHAR(50),
     event_date DATE,
-    imposing_country CHAR(3),
+    imposing_country VARCHAR(3),
     target VARCHAR(100),
     policy_name VARCHAR(100),
     severity_score SMALLINT,

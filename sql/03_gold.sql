@@ -41,7 +41,7 @@ CREATE INDEX idx_fact_chip_year_date ON gold.fact_chip_year (date_key);
 CREATE TABLE gold.dim_company (
     company_id SERIAL PRIMARY KEY,
     company_name VARCHAR(100) NOT NULL UNIQUE,
-    country_or_region CHAR(3) NOT NULL,
+    country_or_region VARCHAR(3) NOT NULL,
     ticker VARCHAR(10),
     segment VARCHAR(50) NOT NULL
 );
@@ -68,7 +68,7 @@ CREATE TABLE gold.dim_product (
 CREATE TABLE gold.fact_product_price_month (
     product_id INT REFERENCES gold.dim_product (product_id),
     date_key INT REFERENCES gold.dim_date (date_key),
-    currency CHAR(3) NOT NULL,
+    currency VARCHAR(3) NOT NULL,
     price NUMERIC(10, 2) NOT NULL,
     PRIMARY KEY (product_id, date_key)
 );
@@ -80,7 +80,8 @@ CREATE INDEX idx_fact_product_price_month_date ON gold.fact_product_price_month 
 CREATE TABLE gold.dim_fab (
     fab_id SERIAL PRIMARY KEY,
     company_name VARCHAR(100) NOT NULL,
-    country_iso3 CHAR(3) NOT NULL,
+    company_id INT REFERENCES gold.dim_company (company_id),
+    country_iso3 VARCHAR(3) NOT NULL,
     process_node_nm NUMERIC(5, 2) NOT NULL,
     fab_type VARCHAR(30) NOT NULL,
     fab_started_year SMALLINT,
@@ -104,10 +105,12 @@ CREATE INDEX idx_fact_fab_capacity_year_date ON gold.fact_fab_capacity_year (dat
 CREATE TABLE gold.export_control_event (
     control_id VARCHAR(50) PRIMARY KEY,
     date_key INT REFERENCES gold.dim_date (date_key),
-    imposing_country CHAR(3) NOT NULL,
+    imposing_country VARCHAR(3) NOT NULL,
     target VARCHAR(100) NOT NULL,
     policy_name VARCHAR(100) NOT NULL,
     severity_score SMALLINT CHECK (severity_score BETWEEN 1 AND 10),
     description TEXT,
     era VARCHAR(20) NOT NULL CHECK (era IN ('trump_1_0', 'biden', 'trump_2_0'))
 );
+
+CREATE INDEX idx_export_control_event_date ON gold.export_control_event (date_key);

@@ -6,6 +6,7 @@ erDiagram
 "gold.fact_financials_year" }o--|| "gold.dim_company" : "FOREIGN KEY (company_id) REFERENCES gold.dim_company(company_id)"
 "gold.fact_product_price_month" }o--|| "gold.dim_date" : "FOREIGN KEY (date_key) REFERENCES gold.dim_date(date_key)"
 "gold.fact_product_price_month" }o--|| "gold.dim_product" : "FOREIGN KEY (product_id) REFERENCES gold.dim_product(product_id)"
+"gold.dim_fab" }o--o| "gold.dim_company" : "FOREIGN KEY (company_id) REFERENCES gold.dim_company(company_id)"
 "gold.fact_fab_capacity_year" }o--|| "gold.dim_date" : "FOREIGN KEY (date_key) REFERENCES gold.dim_date(date_key)"
 "gold.fact_fab_capacity_year" }o--|| "gold.dim_fab" : "FOREIGN KEY (fab_id) REFERENCES gold.dim_fab(fab_id)"
 "gold.export_control_event" }o--o| "gold.dim_date" : "FOREIGN KEY (date_key) REFERENCES gold.dim_date(date_key)"
@@ -40,7 +41,7 @@ erDiagram
 "gold.dim_company" {
   integer company_id
   varchar_100_ company_name
-  character_3_ country_or_region
+  varchar_3_ country_or_region
   varchar_10_ ticker
   varchar_50_ segment
 }
@@ -61,13 +62,14 @@ erDiagram
 "gold.fact_product_price_month" {
   integer product_id FK
   integer date_key FK
-  character_3_ currency
+  varchar_3_ currency
   numeric_10_2_ price
 }
 "gold.dim_fab" {
   integer fab_id
   varchar_100_ company_name
-  character_3_ country_iso3
+  integer company_id FK
+  varchar_3_ country_iso3
   numeric_5_2_ process_node_nm
   varchar_30_ fab_type
   smallint fab_started_year
@@ -80,7 +82,7 @@ erDiagram
 "gold.export_control_event" {
   varchar_50_ control_id
   integer date_key FK
-  character_3_ imposing_country
+  varchar_3_ imposing_country
   varchar_100_ target
   varchar_100_ policy_name
   smallint severity_score
