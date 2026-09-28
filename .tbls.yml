@@ -1,0 +1,5 @@
+dsn: postgres://de:de@localhost:5433/semicond?sslmode=disable
+
+# Document only the dimensional model (gold layer).
+include:
+  - gold.*
