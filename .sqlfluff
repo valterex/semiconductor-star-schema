@@ -1,0 +1,9 @@
+[sqlfluff]
+dialect = postgres
+max_line_length = 88
+# RF04 flags valid Postgres identifiers (date, year, month, day); AL03 flags
+# positional casts in INSERT ... SELECT where aliases are meaningless.
+exclude_rules = RF04, AL03
+
+[sqlfluff:rules:layout.long_lines]
+ignore_comment_lines = True

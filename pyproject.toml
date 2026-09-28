@@ -1,0 +1,29 @@
+[project]
+name = "semiconductor-star-schema"
+version = "0.1.0"
+description = "Dimensional modeling of the Global Semiconductor Industry dataset on a medallion architecture."
+requires-python = ">=3.11"
+dependencies = [
+    "kagglehub>=1.0.2",
+    "psycopg[binary]>=3.3.6",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.16.9",
+    "basedpyright>=1.40.1",
+    "sqlfluff>=4.3.0",
+    "pre-commit>=4.6.2",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pyright]
+pythonVersion = "3.11"
+typeCheckingMode = "standard"
+include = ["scripts"]

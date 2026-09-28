@@ -1,0 +1,89 @@
+erDiagram
+
+"gold.fact_chip_year" }o--|| "gold.dim_date" : "FOREIGN KEY (date_key) REFERENCES gold.dim_date(date_key)"
+"gold.fact_chip_year" }o--|| "gold.dim_chip" : "FOREIGN KEY (chip_id) REFERENCES gold.dim_chip(chip_id)"
+"gold.fact_financials_year" }o--|| "gold.dim_date" : "FOREIGN KEY (date_key) REFERENCES gold.dim_date(date_key)"
+"gold.fact_financials_year" }o--|| "gold.dim_company" : "FOREIGN KEY (company_id) REFERENCES gold.dim_company(company_id)"
+"gold.fact_product_price_month" }o--|| "gold.dim_date" : "FOREIGN KEY (date_key) REFERENCES gold.dim_date(date_key)"
+"gold.fact_product_price_month" }o--|| "gold.dim_product" : "FOREIGN KEY (product_id) REFERENCES gold.dim_product(product_id)"
+"gold.fact_fab_capacity_year" }o--|| "gold.dim_date" : "FOREIGN KEY (date_key) REFERENCES gold.dim_date(date_key)"
+"gold.fact_fab_capacity_year" }o--|| "gold.dim_fab" : "FOREIGN KEY (fab_id) REFERENCES gold.dim_fab(fab_id)"
+"gold.export_control_event" }o--o| "gold.dim_date" : "FOREIGN KEY (date_key) REFERENCES gold.dim_date(date_key)"
+
+"gold.dim_date" {
+  integer date_key
+  date date
+  smallint year
+  smallint quarter
+  smallint month
+  varchar_10_ month_name
+  smallint day
+  boolean is_weekend
+}
+"gold.dim_chip" {
+  integer chip_id
+  varchar_100_ chip_name
+  varchar_100_ vendor
+  date launch_date
+  integer memory_gb
+  numeric_10_2_ fp16_tflops
+  integer tdp_watts
+  text description
+}
+"gold.fact_chip_year" {
+  integer chip_id FK
+  integer date_key FK
+  bigint estimated_shipments_units
+  numeric_12_2_ estimated_asp_usd
+  numeric_12_2_ estimated_revenue_usd_m
+}
+"gold.dim_company" {
+  smallint company_id
+  varchar_100_ company_name
+  character_3_ country_or_region
+  varchar_10_ ticker
+  varchar_50_ segment
+}
+"gold.fact_financials_year" {
+  smallint company_id FK
+  integer date_key FK
+  numeric_10_2_ revenue_usd_bn
+  numeric_5_2_ operating_margin_pct
+  numeric_10_2_ operating_income_usd_bn
+  numeric_10_2_ rd_spend_usd_bn
+  numeric_10_2_ capex_usd_bn
+}
+"gold.dim_product" {
+  smallint product_id
+  varchar_50_ product_name
+  varchar_30_ unit
+}
+"gold.fact_product_price_month" {
+  smallint product_id FK
+  integer date_key FK
+  character_3_ currency
+  numeric_10_2_ price
+}
+"gold.dim_fab" {
+  smallint fab_id
+  varchar_100_ company_name
+  character_3_ country_iso3
+  numeric_5_2_ process_node_nm
+  varchar_30_ fab_type
+  smallint fab_started_year
+}
+"gold.fact_fab_capacity_year" {
+  smallint fab_id FK
+  integer date_key FK
+  numeric_12_2_ monthly_wafer_capacity
+}
+"gold.export_control_event" {
+  varchar_50_ control_id
+  integer date_key FK
+  character_3_ imposing_country
+  varchar_100_ target
+  varchar_100_ policy_name
+  smallint severity_score
+  text description
+  varchar_20_ era
+}
