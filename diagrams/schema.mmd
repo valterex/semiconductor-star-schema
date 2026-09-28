@@ -38,14 +38,14 @@ erDiagram
   numeric_12_2_ estimated_revenue_usd_m
 }
 "gold.dim_company" {
-  smallint company_id
+  integer company_id
   varchar_100_ company_name
   character_3_ country_or_region
   varchar_10_ ticker
   varchar_50_ segment
 }
 "gold.fact_financials_year" {
-  smallint company_id FK
+  integer company_id FK
   integer date_key FK
   numeric_10_2_ revenue_usd_bn
   numeric_5_2_ operating_margin_pct
@@ -54,18 +54,18 @@ erDiagram
   numeric_10_2_ capex_usd_bn
 }
 "gold.dim_product" {
-  smallint product_id
+  integer product_id
   varchar_50_ product_name
   varchar_30_ unit
 }
 "gold.fact_product_price_month" {
-  smallint product_id FK
+  integer product_id FK
   integer date_key FK
   character_3_ currency
   numeric_10_2_ price
 }
 "gold.dim_fab" {
-  smallint fab_id
+  integer fab_id
   varchar_100_ company_name
   character_3_ country_iso3
   numeric_5_2_ process_node_nm
@@ -73,7 +73,7 @@ erDiagram
   smallint fab_started_year
 }
 "gold.fact_fab_capacity_year" {
-  smallint fab_id FK
+  integer fab_id FK
   integer date_key FK
   numeric_12_2_ monthly_wafer_capacity
 }
