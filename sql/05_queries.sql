@@ -52,25 +52,6 @@ HAVING
 ORDER BY
     companies DESC;
 
--- Revenue with the previous year's revenue
-SELECT
-    c.company_name,
-    d.year,
-    f.revenue_usd_bn,
-    LAG(f.revenue_usd_bn) OVER (
-        PARTITION BY
-            f.company_id
-        ORDER BY
-            f.date_key
-    ) AS prev_year_revenue
-FROM
-    fact_financials_year AS f
-INNER JOIN dim_company AS c ON f.company_id = c.company_id
-INNER JOIN dim_date AS d ON f.date_key = d.date_key
-ORDER BY
-    c.company_name,
-    f.date_key;
-
 -- Top 5 companies by total revenue (CTE + aggregation)
 WITH
 company_totals AS (

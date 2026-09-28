@@ -151,7 +151,7 @@ INSERT INTO gold.fact_chip_year (
 )
 SELECT
     c.chip_id,
-    s.year * 10000 + 101,
+    to_char(to_date(s.year::text, 'YYYY'), 'YYYYMMDD')::int,
     s.estimated_shipments_units,
     s.estimated_asp_usd,
     s.estimated_revenue_usd_m
@@ -173,7 +173,7 @@ INSERT INTO gold.fact_financials_year (
 )
 SELECT
     c.company_id,
-    s.year * 10000 + 101,
+    to_char(to_date(s.year::text, 'YYYY'), 'YYYYMMDD')::int,
     s.revenue_usd_bn,
     s.operating_margin_pct,
     s.operating_income_usd_bn,
@@ -217,7 +217,7 @@ INSERT INTO gold.fact_fab_capacity_year (
 )
 SELECT
     f.fab_id,
-    s.year * 10000 + 101,
+    to_char(to_date(s.year::text, 'YYYY'), 'YYYYMMDD')::int,
     s.monthly_wafer_capacity
 FROM silver.fab_capacity AS s
 INNER JOIN gold.dim_fab AS f

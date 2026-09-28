@@ -39,7 +39,7 @@ CREATE TABLE gold.fact_chip_year (
 CREATE INDEX idx_fact_chip_year_date ON gold.fact_chip_year (date_key);
 
 CREATE TABLE gold.dim_company (
-    company_id SMALLSERIAL PRIMARY KEY,
+    company_id SERIAL PRIMARY KEY,
     company_name VARCHAR(100) NOT NULL UNIQUE,
     country_or_region CHAR(3) NOT NULL,
     ticker VARCHAR(10),
@@ -47,7 +47,7 @@ CREATE TABLE gold.dim_company (
 );
 
 CREATE TABLE gold.fact_financials_year (
-    company_id SMALLINT REFERENCES gold.dim_company (company_id),
+    company_id INT REFERENCES gold.dim_company (company_id),
     date_key INT REFERENCES gold.dim_date (date_key),
     revenue_usd_bn NUMERIC(10, 2),
     operating_margin_pct NUMERIC(5, 2),
@@ -60,13 +60,13 @@ CREATE TABLE gold.fact_financials_year (
 CREATE INDEX idx_fact_financials_year_date ON gold.fact_financials_year (date_key);
 
 CREATE TABLE gold.dim_product (
-    product_id SMALLSERIAL PRIMARY KEY,
+    product_id SERIAL PRIMARY KEY,
     product_name VARCHAR(50) NOT NULL UNIQUE,
     unit VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE gold.fact_product_price_month (
-    product_id SMALLINT REFERENCES gold.dim_product (product_id),
+    product_id INT REFERENCES gold.dim_product (product_id),
     date_key INT REFERENCES gold.dim_date (date_key),
     currency CHAR(3) NOT NULL,
     price NUMERIC(10, 2) NOT NULL,
@@ -78,7 +78,7 @@ CREATE INDEX idx_fact_product_price_month_date ON gold.fact_product_price_month 
 );
 
 CREATE TABLE gold.dim_fab (
-    fab_id SMALLSERIAL PRIMARY KEY,
+    fab_id SERIAL PRIMARY KEY,
     company_name VARCHAR(100) NOT NULL,
     country_iso3 CHAR(3) NOT NULL,
     process_node_nm NUMERIC(5, 2) NOT NULL,
@@ -93,7 +93,7 @@ CREATE TABLE gold.dim_fab (
 );
 
 CREATE TABLE gold.fact_fab_capacity_year (
-    fab_id SMALLINT REFERENCES gold.dim_fab (fab_id),
+    fab_id INT REFERENCES gold.dim_fab (fab_id),
     date_key INT REFERENCES gold.dim_date (date_key),
     monthly_wafer_capacity NUMERIC(12, 2),
     PRIMARY KEY (fab_id, date_key)
