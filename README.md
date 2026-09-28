@@ -25,8 +25,9 @@ kagglehub (source CSVs)  →  bronze (raw TEXT)  →  silver (typed/conformed)  
 
 Facts join dimensions on surrogate keys; the fact primary key encodes the grain (e.g.
 `(company_id, date_key)`). A conformed `dim_date` (integer `date_key`, day grain) is shared by
-every fact and the event table. The event table has no additive measure, so it is modeled as a
-single table rather than a forced star.
+every fact and the event table. `dim_fab` links back to the conformed `dim_company` (nullable,
+since not every fab company appears in the financials data). The event table has no additive
+measure, so it is modeled as a single table rather than a forced star.
 
 ## ER diagram
 
@@ -45,6 +46,7 @@ erDiagram
 "gold.fact_fab_capacity_year" }o--|| "gold.dim_fab" : "fab_id"
 "gold.fact_fab_capacity_year" }o--|| "gold.dim_date" : "date_key"
 "gold.export_control_event" }o--|| "gold.dim_date" : "date_key"
+"gold.dim_fab" }o--o| "gold.dim_company" : "company_id"
 
 "gold.dim_date" {
   int date_key PK
@@ -76,7 +78,7 @@ erDiagram
 "gold.dim_company" {
   int company_id PK
   varchar company_name
-  char country_or_region
+  varchar country_or_region
   varchar ticker
   varchar segment
 }
@@ -97,13 +99,14 @@ erDiagram
 "gold.fact_product_price_month" {
   int product_id FK
   int date_key FK
-  char currency
+  varchar currency
   numeric price
 }
 "gold.dim_fab" {
   int fab_id PK
   varchar company_name
-  char country_iso3
+  int company_id FK
+  varchar country_iso3
   numeric process_node_nm
   varchar fab_type
   smallint fab_started_year
@@ -116,7 +119,7 @@ erDiagram
 "gold.export_control_event" {
   varchar control_id PK
   int date_key FK
-  char imposing_country
+  varchar imposing_country
   varchar target
   varchar policy_name
   smallint severity_score

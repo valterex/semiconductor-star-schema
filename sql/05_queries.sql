@@ -2,7 +2,6 @@
 SET
 search_path = gold;
 
--- Total estimated chip revenue by vendor
 SELECT
     c.vendor,
     SUM(f.estimated_revenue_usd_m) AS total_revenue_usd_m
@@ -14,9 +13,8 @@ GROUP BY
 ORDER BY
     total_revenue_usd_m DESC;
 
--- All fabs and their 2024 capacity; NULL where a fab has no 2024 record
 WITH
-c AS (
+fab_capacity_2024 AS (
     SELECT
         fc.fab_id,
         fc.monthly_wafer_capacity
@@ -35,11 +33,10 @@ SELECT
     c.monthly_wafer_capacity AS capacity_2024
 FROM
     dim_fab AS f
-LEFT JOIN c ON f.fab_id = c.fab_id
+LEFT JOIN fab_capacity_2024 AS c ON f.fab_id = c.fab_id
 ORDER BY
     capacity_2024 DESC NULLS LAST;
 
--- Segments with more than 3 companies
 SELECT
     segment,
     COUNT(*) AS companies
@@ -52,7 +49,6 @@ HAVING
 ORDER BY
     companies DESC;
 
--- Top 5 companies by total revenue (CTE + aggregation)
 WITH
 company_totals AS (
     SELECT
@@ -74,3 +70,84 @@ ORDER BY
     t.total_revenue DESC
 LIMIT
     5;
+
+-- Currency is kept separate: averaging prices across currencies would be wrong.
+SELECT
+    f.currency,
+    d.year,
+    d.month_name,
+    AVG(f.price) AS avg_price
+FROM
+    fact_product_price_month AS f
+INNER JOIN dim_date AS d ON f.date_key = d.date_key
+GROUP BY
+    f.currency,
+    d.year,
+    d.month,
+    d.month_name
+ORDER BY
+    f.currency,
+    d.year,
+    d.month;
+
+SELECT
+    era,
+    imposing_country,
+    COUNT(*) AS actions,
+    AVG(severity_score) AS avg_severity
+FROM
+    export_control_event
+GROUP BY
+    era,
+    imposing_country
+ORDER BY
+    era ASC,
+    actions DESC;
+
+-- Two facts are joined through the conformed dim_date (year) and the conformed
+-- dim_company (via dim_fab.company_id). Fabs with no matching company drop out.
+WITH
+revenue AS (
+    SELECT
+        d.year,
+        f.company_id,
+        SUM(f.revenue_usd_bn) AS revenue_usd_bn
+    FROM
+        fact_financials_year AS f
+    INNER JOIN dim_date AS d ON f.date_key = d.date_key
+    GROUP BY
+        d.year,
+        f.company_id
+),
+
+capacity AS (
+    SELECT
+        d.year,
+        fb.company_id,
+        SUM(fc.monthly_wafer_capacity) AS total_capacity
+    FROM
+        fact_fab_capacity_year AS fc
+    INNER JOIN dim_fab AS fb ON fc.fab_id = fb.fab_id
+    INNER JOIN dim_date AS d ON fc.date_key = d.date_key
+    WHERE
+        fb.company_id IS NOT NULL
+    GROUP BY
+        d.year,
+        fb.company_id
+)
+
+SELECT
+    r.year,
+    c.company_name,
+    r.revenue_usd_bn,
+    ca.total_capacity
+FROM
+    revenue AS r
+INNER JOIN capacity AS ca
+    ON
+        r.company_id = ca.company_id
+        AND r.year = ca.year
+INNER JOIN dim_company AS c ON r.company_id = c.company_id
+ORDER BY
+    r.year ASC,
+    r.revenue_usd_bn DESC;

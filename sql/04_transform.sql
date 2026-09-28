@@ -202,15 +202,17 @@ INNER JOIN gold.dim_product AS p ON s.product = p.product_name;
 
 -- ===== silver -> gold: fab_capacity -> dim_fab, fact_fab_capacity_year =====
 INSERT INTO gold.dim_fab (
-    company_name, country_iso3, process_node_nm, fab_type, fab_started_year
+    company_name, company_id, country_iso3, process_node_nm, fab_type, fab_started_year
 )
 SELECT DISTINCT
-    company,
-    country_iso3,
-    process_node_nm,
-    fab_type,
-    fab_started_year
-FROM silver.fab_capacity;
+    s.company,
+    c.company_id,
+    s.country_iso3,
+    s.process_node_nm,
+    s.fab_type,
+    s.fab_started_year
+FROM silver.fab_capacity AS s
+LEFT JOIN gold.dim_company AS c ON s.company = c.company_name;
 
 INSERT INTO gold.fact_fab_capacity_year (
     fab_id, date_key, monthly_wafer_capacity
