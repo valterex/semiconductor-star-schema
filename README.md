@@ -132,7 +132,7 @@ erDiagram
 
 ```
 ├── docker-compose.yml      # PostgreSQL 18 (localhost-only, creds from .env)
-├── Makefile                # ingest / query / diagram / psql / format / lint / typecheck
+├── Makefile                # task runner — `make help` lists the targets
 ├── .env.example            # connection settings template (copy to .env)
 ├── pyproject.toml          # dependencies + ruff + pyright config
 ├── uv.lock                 # locked dependency versions
@@ -144,8 +144,12 @@ erDiagram
 │   ├── 03_gold.sql         # star schema (dim_*/fact_* + event)
 │   ├── 04_transform.sql    # bronze → silver → gold
 │   └── 05_queries.sql      # sample analytical queries
-├── scripts/
-│   └── ingest.py           # download (kagglehub) → COPY → transform
+├── src/
+│   └── semiconductor/
+│       ├── __main__.py     # entrypoint (python -m semiconductor)
+│       ├── config.py       # Settings + schema/source mappings
+│       ├── db.py           # connect / COPY / counts
+│       └── pipeline.py     # ELT orchestration (extract → load → transform)
 └── diagrams/
     └── schema.mmd          # generated ER diagram
 ```
@@ -159,6 +163,7 @@ Prerequisites: [Docker](https://docs.docker.com/get-docker/), [uv](https://docs.
 uv sync               # install dependencies into .venv (from pyproject.toml)
 cp .env.example .env  # once; edit the password if you like
 
+make help       # list all available targets
 make ingest     # download the dataset, load bronze → silver → gold, print row counts
 make query      # run the sample analytical queries
 make diagram    # regenerate diagrams/schema.mmd from the live schema
