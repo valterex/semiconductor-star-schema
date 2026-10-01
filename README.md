@@ -148,8 +148,8 @@ erDiagram
 │   ├── 04_transform.sql    # bronze → silver → gold
 │   └── 05_queries.sql      # sample analytical queries
 ├── src/
-│   └── semiconductor/
-│       ├── __main__.py     # entrypoint (python -m semiconductor)
+│   └── semiconductor_star_schema/
+│       ├── __main__.py     # entrypoint (python -m semiconductor_star_schema)
 │       ├── config.py       # Settings + schema/source mappings
 │       ├── db.py           # connect / COPY / counts
 │       └── pipeline.py     # ELT orchestration (extract → load → transform)

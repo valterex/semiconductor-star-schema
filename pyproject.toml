@@ -29,7 +29,7 @@ line-length = 88
 select = ["E", "F", "I", "UP", "B"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/semiconductor"]
+packages = ["src/semiconductor_star_schema"]
 
 [tool.pyright]
 pythonVersion = "3.11"

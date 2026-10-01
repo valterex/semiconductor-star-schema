@@ -1,6 +1,6 @@
 """Package entrypoint: run the full ingest pipeline.
 
-Usage: python -m semiconductor
+Usage: python -m semiconductor_star_schema
 """
 
 from __future__ import annotations
