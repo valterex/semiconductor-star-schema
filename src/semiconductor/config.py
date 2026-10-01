@@ -50,8 +50,7 @@ class Settings:
     def from_env(cls) -> Settings:
         password = os.environ.get("POSTGRES_PASSWORD")
         if password is None:
-            raise SystemExit(
-                "POSTGRES_PASSWORD is not set. Source .env or set it.")
+            raise SystemExit("POSTGRES_PASSWORD is not set. Source .env or set it.")
 
         return cls(
             db_host=os.environ.get("POSTGRES_HOST", "127.0.0.1"),
