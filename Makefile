@@ -26,7 +26,7 @@ wait: ## Block until Postgres accepts connections
 	@until docker compose exec -T postgres pg_isready -U $(POSTGRES_USER) -d $(POSTGRES_DB) >/dev/null 2>&1; do sleep 1; done
 
 ingest: up wait ## Download the dataset and load bronze -> silver -> gold
-	uv run python -m semiconductor
+	uv run python -m semiconductor_star_schema
 
 query: up wait ## Run the sample analytical queries
 	$(PSQL) < sql/05_queries.sql

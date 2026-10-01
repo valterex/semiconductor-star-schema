@@ -6,7 +6,7 @@ import re
 
 import pytest
 
-from semiconductor.config import (
+from semiconductor_star_schema.config import (
     BASE_DIR,
     BRONZE_SOURCES,
     GOLD_TABLES,

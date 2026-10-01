@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from semiconductor.db import _read_chunks
+from semiconductor_star_schema.db import _read_chunks
 
 
 def test_read_chunks_splits_evenly(tmp_path):
