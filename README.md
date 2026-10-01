@@ -1,5 +1,7 @@
 # Semiconductor Star Schema
 
+[![ci](https://github.com/valterex/semiconductor-star-schema/actions/workflows/ci.yml/badge.svg)](https://github.com/valterex/semiconductor-star-schema/actions/workflows/ci.yml)
+
 Dimensional modeling of the [Global Semiconductor Industry 2010–2026](https://www.kaggle.com/datasets/sergionefedov/global-semiconductor-industry-2010-2026)
 dataset on a medallion architecture — bronze → silver → gold — in PostgreSQL, ingested with Python.
 
