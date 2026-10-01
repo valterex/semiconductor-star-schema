@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: up down down-vol ingest query diagram psql wait format lint typecheck check help
+.PHONY: up down down-vol ingest query diagram psql wait format lint typecheck test check help
 
 -include .env
 export
@@ -50,4 +50,7 @@ lint: ## Lint Python and SQL (read-only)
 typecheck: ## Run basedpyright
 	uv run basedpyright
 
-check: lint typecheck ## Run the full quality gate
+test: ## Run pytest
+	uv run pytest
+
+check: lint typecheck test ## Run the full quality gate

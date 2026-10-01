@@ -138,6 +138,7 @@ erDiagram
 ├── uv.lock                 # locked dependency versions
 ├── .pre-commit-config.yaml # commit-message linting (Conventional Commits)
 ├── .tbls.yml               # tbls config (documents the gold layer)
+├── .github/workflows/ci.yml # lint + typecheck + tests on push/PR
 ├── sql/
 │   ├── 01_bronze.sql       # raw CSV mirrors (TEXT)
 │   ├── 02_silver.sql       # typed + conformed tables
@@ -150,6 +151,7 @@ erDiagram
 │       ├── config.py       # Settings + schema/source mappings
 │       ├── db.py           # connect / COPY / counts
 │       └── pipeline.py     # ELT orchestration (extract → load → transform)
+├── tests/                  # pytest tests (config + db helpers)
 └── diagrams/
     └── schema.mmd          # generated ER diagram
 ```
@@ -171,7 +173,8 @@ make psql       # open a psql shell
 make down       # stop the container
 ```
 
-Development: `make check` runs `ruff` lint + format, `sqlfluff` SQL lint, and `basedpyright` type checking.
+Development: `make check` runs `ruff` lint + format, `sqlfluff` SQL lint, `basedpyright`
+type checking, and `pytest` tests.
 
 Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/) and are
 validated by a `pre-commit` `commit-msg` hook. Enable it once:
@@ -179,6 +182,11 @@ validated by a `pre-commit` `commit-msg` hook. Enable it once:
 ```sh
 uv run pre-commit install --hook-type commit-msg
 ```
+
+## CI
+
+A GitHub Actions workflow (`.github/workflows/ci.yml`) runs `make check` on every push and
+pull request, so linting, type checking, and tests are enforced remotely.
 
 `kagglehub` may require Kaggle credentials for the download; export `KAGGLE_USERNAME` and
 `KAGGLE_KEY` if prompted.
