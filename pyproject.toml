@@ -19,6 +19,7 @@ dev = [
     "sqlfluff>=4.3.0",
     "pre-commit>=4.6.2",
     "pytest>=8",
+    "pytest-cov>=6.0",
 ]
 
 [tool.ruff]
@@ -35,3 +36,19 @@ packages = ["src/semiconductor_star_schema"]
 pythonVersion = "3.11"
 typeCheckingMode = "standard"
 include = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=semiconductor_star_schema --cov-report=term-missing --cov-fail-under=80"
+
+[tool.coverage.run]
+relative_files = true
+omit = ["*/__main__.py"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+]
