@@ -16,6 +16,8 @@ env/
 
 # Tool caches
 .ruff_cache/
+.coverage
+htmlcov/
 
 # Editors / IDEs
 .idea/
